@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dart Volume Controller</title>
+<meta name="description" content="다트를 던져 맞힌 점수가 그대로 볼륨이 되는 볼륨 컨트롤러">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<main class="app">
+  <header class="brand">
+    <h1 class="brand-name">Dart Volume Controller</h1>
+    <p class="brand-rule">맞힌 점수가 곧 볼륨이에요</p>
+  </header>
+
+  <dl class="rules" aria-label="점수 규칙">
+    <div><dt>싱글</dt><dd>×1</dd></div>
+    <div><dt>더블</dt><dd>×2</dd></div>
+    <div><dt>트리플</dt><dd>×3</dd></div>
+    <div><dt>아우터 불</dt><dd>25</dd></div>
+    <div><dt>불스아이</dt><dd>50</dd></div>
+    <div><dt>빗나감</dt><dd>0</dd></div>
+  </dl>
+
+  <section class="track" aria-label="재생 중인 곡">
+    <button class="play-button" id="play-button" type="button" aria-label="재생">
+      <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6.5v11l9-5.5z"/></svg>
+      <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6.5h2.6v11H8zM13.4 6.5H16v11h-2.6z"/></svg>
+    </button>
+    <div class="track-meta">
+      <p class="track-title" id="track-title">Let's Go Fishin'</p>
+      <p class="track-sub">
+        <span id="track-artist">Karissa Hobbs</span>
+        <a id="track-license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a>
+      </p>
+      <div class="track-progress" aria-hidden="true"><span id="track-progress-fill"></span></div>
+      <button class="text-button" id="open-file-button" type="button">내 음악 열기</button>
+      <input type="file" id="file-input" accept="audio/*" hidden>
+    </div>
+  </section>
+
+  <div class="stage">
+    <svg class="board" id="board" viewBox="-230 -230 460 460" role="img" aria-label="다트판">
+      <circle class="board-edge" r="212"></circle>
+      <g id="board-segments"></g>
+      <g id="board-numbers"></g>
+      <g id="hit-layer"></g>
+      <g id="dart-layer"></g>
+      <g id="aim-layer">
+        <line class="aim-line" id="aim-x" x1="0" y1="-230" x2="0" y2="230"></line>
+        <line class="aim-line" id="aim-y" x1="-230" y1="0" x2="230" y2="0"></line>
+        <circle class="aim-dot" id="aim-dot" r="4.5"></circle>
+      </g>
+    </svg>
+  </div>
+
+  <section class="volume" aria-label="볼륨">
+    <p class="label">
+      볼륨
+      <svg class="speaker" id="speaker" viewBox="0 0 24 24" aria-hidden="true">
+        <path class="speaker-body" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>
+        <path class="speaker-wave wave-1" d="M15 9.8a3.2 3.2 0 0 1 0 4.4"/>
+        <path class="speaker-wave wave-2" d="M17.4 7.6a6.3 6.3 0 0 1 0 8.8"/>
+        <path class="speaker-wave wave-3" d="M19.8 5.4a9.4 9.4 0 0 1 0 13.2"/>
+        <path class="speaker-mute" d="M15.5 9.5l5 5M20.5 9.5l-5 5"/>
+      </svg>
+    </p>
+    <p class="volume-value" id="volume-value">30</p>
+    <div class="volume-bar" aria-hidden="true"><span id="volume-bar-fill"></span></div>
+    <p class="volume-source" id="volume-source">기본 볼륨이에요</p>
+  </section>
+
+  <section class="hint" aria-label="던지는 방법">
+    <ol class="steps">
+      <li id="step-x">가로</li>
+      <li id="step-y">세로</li>
+    </ol>
+    <p class="hint-text" id="hint-text"></p>
+  </section>
+
+  <p class="sr-only" id="announcer" aria-live="polite"></p>
+  <div class="drop-overlay" id="drop-overlay" hidden><p>여기에 놓으면 이 곡을 틀어요</p></div>
+</main>
+<audio id="audio" src="audio/lets-go-fishin.mp3" preload="auto" loop></audio>
+</body>
+</html>
